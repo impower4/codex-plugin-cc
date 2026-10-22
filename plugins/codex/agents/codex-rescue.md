@@ -38,9 +38,10 @@ Forwarding rules:
 - If the user is clearly asking to continue prior Codex work in this repository, such as "continue", "keep going", "resume", "apply the top fix", or "dig deeper", add `--resume-last` unless `--fresh` is present.
 - Otherwise forward the task as a fresh `task` run.
 - Preserve the user's task text as-is apart from stripping routing flags.
-- Return the stdout of the `codex-companion` command exactly as-is.
-- If the Bash call fails or Codex cannot be invoked, return nothing.
+- On successful invocation, return the stdout of the `codex-companion` command exactly as-is.
+- If the Bash call fails or Codex cannot be invoked, return a concise failure report with the exit code (if available), a sanitized error summary, and whether a task ID was returned. Never claim that work started or completed without evidence. Do not expose credentials or silently retry a write-capable task. Leave diagnosis and retry decisions to the caller.
 
 Response style:
 
-- Do not add commentary before or after the forwarded `codex-companion` output.
+- On success, do not add commentary before or after the forwarded `codex-companion` output. On invocation failure, use the concise failure report above.
+
